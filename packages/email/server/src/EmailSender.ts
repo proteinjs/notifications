@@ -43,11 +43,11 @@ export class EmailSender {
   private getDefaultEmailConfig(): EmailConfig {
     if (!EmailSender.defaultEmailConfig) {
       const defaultEmailConfigFactory = SourceRepository.get().object<DefaultEmailConfigFactory>(
-        '@proteinjs/user-server/DefaultEmailConfigFactory'
+        '@proteinjs/email-server/DefaultEmailConfigFactory'
       );
       if (!defaultEmailConfigFactory) {
         throw new Error(
-          `Unable to find a @proteinjs/user-server/DefaultEmailConfigFactory implementation. Either implement DefaultEmailConfigFactory or pass in an email config when instantiating EmailSender.`
+          `Unable to find a @proteinjs/email-server/DefaultEmailConfigFactory implementation. Either implement DefaultEmailConfigFactory or pass in an email config when instantiating EmailSender.`
         );
       }
 
