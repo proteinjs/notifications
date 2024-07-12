@@ -1,0 +1,64 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+
+      - name: Configure git user
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.3.1'
+      
+      - name: Install root package
+        run: |
+          npm i
+      
+      - name: Build packages
+        run: |
+          npm run build-workspace
+
+      - name: Test packages
+        run: |
+          npm run test-workspace
+
+      - name: Commit package-locks
+        run: |
+          git add .
+          if git diff --staged --exit-code; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(version) update package-locks [skip ci]"
+            git fetch origin main
+            git rebase origin/main
+            git push origin main
+          fi
+
+      - name: Authenticate with npm registry
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Version and Publish
+        run: |
+          npx lerna publish --yes --no-private
+        env:
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
