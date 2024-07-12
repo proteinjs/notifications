@@ -3,7 +3,7 @@ import Mail from 'nodemailer/lib/mailer';
 
 export const getDefaultPasswordResetEmailConfigFactory = () =>
   SourceRepository.get().object<DefaultPasswordResetEmailConfigFactory>(
-    '@proteinjs/user-server/DefaultPasswordResetEmailConfigFactory'
+    '@proteinjs/email-server/DefaultPasswordResetEmailConfigFactory'
   );
 
 export interface PasswordResetEmailConfig {
