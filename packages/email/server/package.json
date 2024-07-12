@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/email-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Email server libraries",
   "main": "./dist/generated/index.js",
   "types": "./dist/generated/index.d.ts",
@@ -23,17 +23,17 @@
     "watch": "reflection-watch"
   },
   "dependencies": {
-    "@proteinjs/util": "1.2.0",
     "@proteinjs/reflection": "1.1.6",
+    "@proteinjs/util": "1.2.0",
     "nodemailer": "6.9.14"
   },
   "devDependencies": {
     "@proteinjs/reflection-build": "1.0.21",
     "@types/jest": "29.5.5",
     "@types/node": "20.3.1",
+    "@types/nodemailer": "6.4.15",
     "@typescript-eslint/eslint-plugin": "7.8.0",
     "@typescript-eslint/parser": "7.8.0",
-    "@types/nodemailer": "6.4.15",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.1.3",
