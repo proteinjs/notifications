@@ -17,8 +17,8 @@ export interface InviteEmailConfig {
   /**
    * A function that generates the email content (both text and HTML versions) for the password reset email.
    *
-   * @param resetPathWithToken A partial URL path for resetting the password, including the reset token.
-   * This is in the format: 'login/reset-password?token=abc123def456'.
+   * @param signupPathWithToken A partial URL path for the sign up page, including the invite token.
+   * This is in the format: 'signup?token=abc123def456'.
    * Note: This is NOT a full URL. You need to prepend your application's base URL to create a complete, clickable link in the email content.
    *
    * @returns An object containing the email content:
@@ -26,15 +26,15 @@ export interface InviteEmailConfig {
    * html: The HTML version of the email (optional, used for styling)
    *
    * @example
-   * getEmailContent: (resetPathWithToken) => {
-   *   const fullResetUrl = `https://myapp.com/${resetPathWithToken}`;
+   * getEmailContent: (signupPathWithToken) => {
+   *   const fullUrl = `https://myapp.com/${signupPathWithToken}`;
    *   return {
-   *     text: `Click here to reset your password: ${fullResetUrl}`,
-   *     html: `<p>Click <a href="${fullResetUrl}">here</a> to reset your password.</p>`
+   *     text: `Click here to sign up: ${fullUrl}`,
+   *     html: `<p>Click <a href="${fullUrl}">here</a> to sign up.</p>`
    *   };
    * }
    */
-  getEmailContent: (resetPathWithToken: string) => {
+  getEmailContent: (signupPathWithToken: string) => {
     text: string;
     html?: string;
   };
