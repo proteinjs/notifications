@@ -2,3 +2,5 @@ node_modules/
 dist/
 generated/
 .DS_Store
+packages/app-version/server/
+packages/app-version/ui/
