@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/email-server",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Email server libraries",
   "main": "./dist/generated/index.js",
   "types": "./dist/generated/index.d.ts",
