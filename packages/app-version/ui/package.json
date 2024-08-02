@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/app-version-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "App version ui components",
   "publishConfig": {
     "access": "public"
