@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/app-version-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "App version server components",
   "publishConfig": {
     "access": "public"
