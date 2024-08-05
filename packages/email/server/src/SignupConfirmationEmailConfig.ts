@@ -1,10 +1,24 @@
 import { Loadable, SourceRepository } from '@proteinjs/reflection';
 import Mail from 'nodemailer/lib/mailer';
 
-export const getDefaultSignupConfirmationEmailConfigFactory = () =>
-  SourceRepository.get().object<DefaultSignupConfirmationEmailConfigFactory>(
-    '@proteinjs/email-server/DefaultSignupConfirmationEmailConfigFactory'
+export const getDefaultSignupConfirmationEmailConfigFactory = (): DefaultSignupConfirmationEmailConfigFactory => {
+  const defaultFactory: DefaultSignupConfirmationEmailConfigFactory = {
+    getConfig: (): SignupConfirmationEmailConfig => ({
+      getNewUserEmailContent: () => ({
+        text: `Welcome to our app! Thank you for signing up. Your account has been successfully created.`,
+      }),
+      getExistingUserEmailContent: () => ({
+        text: `Hello, We received a sign up request for this email address, but you already have an account with us.
+        If you didn't attempt to sign up again, you can safely ignore this email.`,
+      }),
+    }),
+  };
+
+  const factory = SourceRepository.get().object<DefaultSignupConfirmationEmailConfigFactory>(
+    '@proteinjs/user-server/DefaultSignupConfirmationEmailConfigFactory'
   );
+  return factory || defaultFactory;
+};
 
 export interface SignupConfirmationEmailConfig {
   /**
