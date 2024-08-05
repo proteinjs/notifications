@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/email-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Email server libraries",
   "main": "./dist/generated/index.js",
   "types": "./dist/generated/index.d.ts",
@@ -23,12 +23,12 @@
     "watch": "reflection-watch"
   },
   "dependencies": {
-    "@proteinjs/reflection": "1.1.7",
-    "@proteinjs/util": "1.3.1",
+    "@proteinjs/reflection": "1.1.8",
+    "@proteinjs/util": "1.4.0",
     "nodemailer": "6.9.14"
   },
   "devDependencies": {
-    "@proteinjs/reflection-build": "1.0.22",
+    "@proteinjs/reflection-build": "1.0.23",
     "@types/jest": "29.5.5",
     "@types/node": "20.3.1",
     "@types/nodemailer": "6.4.15",
