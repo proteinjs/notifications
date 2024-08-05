@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/app-version-server",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "App version server components",
   "publishConfig": {
     "access": "public"
@@ -21,13 +21,13 @@
     "watch": "reflection-watch"
   },
   "dependencies": {
-    "@proteinjs/app-version-common": "^1.0.2",
-    "@proteinjs/reflection": "1.1.7",
-    "@proteinjs/util": "1.3.1",
+    "@proteinjs/app-version-common": "^1.0.3",
+    "@proteinjs/reflection": "1.1.8",
+    "@proteinjs/util": "1.4.0",
     "semver": "7.6.0"
   },
   "devDependencies": {
-    "@proteinjs/reflection-build": "1.0.22",
+    "@proteinjs/reflection-build": "1.0.23",
     "@types/node": "20.8.2",
     "@types/semver": "7.5.8",
     "@typescript-eslint/eslint-plugin": "7.8.0",
