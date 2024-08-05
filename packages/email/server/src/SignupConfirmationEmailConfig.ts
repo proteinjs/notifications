@@ -1,6 +1,10 @@
 import { Loadable, SourceRepository } from '@proteinjs/reflection';
 import Mail from 'nodemailer/lib/mailer';
 
+export interface DefaultSignupConfirmationEmailConfigFactory extends Loadable {
+  getConfig(): SignupConfirmationEmailConfig;
+}
+
 export const getDefaultSignupConfirmationEmailConfigFactory = (): DefaultSignupConfirmationEmailConfigFactory => {
   const defaultFactory: DefaultSignupConfirmationEmailConfigFactory = {
     getConfig: (): SignupConfirmationEmailConfig => ({
@@ -15,7 +19,7 @@ export const getDefaultSignupConfirmationEmailConfigFactory = (): DefaultSignupC
   };
 
   const factory = SourceRepository.get().object<DefaultSignupConfirmationEmailConfigFactory>(
-    '@proteinjs/user-server/DefaultSignupConfirmationEmailConfigFactory'
+    '@proteinjs/email-server/DefaultSignupConfirmationEmailConfigFactory'
   );
   return factory || defaultFactory;
 };
@@ -27,6 +31,18 @@ export interface SignupConfirmationEmailConfig {
    * @see https://nodemailer.com/message/ for all available options
    */
   options?: Mail.Options;
+
+  /**
+   * Subject for new user signup confirmation emails.
+   * If provided, this will override the subject in options for new user emails.
+   */
+  newUserSubject?: string;
+
+  /**
+   * Subject for existing user notification emails.
+   * If provided, this will override the subject in options for existing user emails.
+   */
+  existingUserSubject?: string;
 
   /**
    * Generates the email content for a new user signup confirmation.
@@ -51,8 +67,4 @@ export interface SignupConfirmationEmailConfig {
     text: string;
     html?: string;
   };
-}
-
-export interface DefaultSignupConfirmationEmailConfigFactory extends Loadable {
-  getConfig(): SignupConfirmationEmailConfig;
 }
