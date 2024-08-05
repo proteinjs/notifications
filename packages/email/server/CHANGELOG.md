@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.0.5...@proteinjs/email-server@1.1.0) (2024-08-05)
+
+
+### Features
+
+* email config files for sign up and invite ([#1](https://github.com/proteinjs/notifications/issues/1)) ([e2787d0](https://github.com/proteinjs/notifications/commit/e2787d08e21fd3642666a79065df81cf74dcef60))
+
+
+
+
+
 ## [1.0.5](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.0.4...@proteinjs/email-server@1.0.5) (2024-08-02)
 
 **Note:** Version bump only for package @proteinjs/email-server
