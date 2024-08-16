@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { Logger } from '@proteinjs/util';
+import { Logger } from '@proteinjs/logger';
 import { Loadable, SourceRepository } from '@proteinjs/reflection';
 import Mail from 'nodemailer/lib/mailer';
 
@@ -37,7 +37,7 @@ export class EmailSender {
       auth: this.config.auth,
     });
     this.fromAddress = this.config.from;
-    this.logger = new Logger('EmailSender');
+    this.logger = new Logger({ name: this.constructor.name });
   }
 
   private getDefaultEmailConfig(): EmailConfig {
@@ -65,9 +65,9 @@ export class EmailSender {
 
     try {
       await this.transporter.sendMail(finalMailOptions);
-      this.logger.info(`Email sent successfully to ${mailOptions.to}`);
+      this.logger.info({ message: `Email sent successfully to ${mailOptions.to}` });
     } catch (error: any) {
-      this.logger.error('Error sending email:', error);
+      this.logger.error({ message: 'Error sending email', error });
       throw new Error('Failed to send email');
     }
   }

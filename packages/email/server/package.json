@@ -23,8 +23,8 @@
     "watch": "reflection-watch"
   },
   "dependencies": {
+    "@proteinjs/logger": "1.0.4",
     "@proteinjs/reflection": "1.1.8",
-    "@proteinjs/util": "1.4.0",
     "nodemailer": "6.9.14"
   },
   "devDependencies": {
