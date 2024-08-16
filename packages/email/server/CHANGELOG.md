@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.2.0...@proteinjs/email-server@1.2.1) (2024-08-16)
+
+
+### Bug Fixes
+
+* refactored to implement new @proteinjs/logger/Logger api ([fd48238](https://github.com/proteinjs/notifications/commit/fd48238a2b2899f6509bda13a8407f6afac49663))
+
+
+
+
+
 # [1.2.0](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.1.1...@proteinjs/email-server@1.2.0) (2024-08-08)
 
 
