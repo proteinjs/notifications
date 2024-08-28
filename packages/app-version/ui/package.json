@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/app-version-ui",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "App version ui components",
   "publishConfig": {
     "access": "public"
@@ -25,7 +25,7 @@
     "@emotion/styled": "11.11.0",
     "@mui/icons-material": "5.14.11",
     "@mui/material": "5.14.11",
-    "@proteinjs/app-version-common": "^1.0.6",
+    "@proteinjs/app-version-common": "^1.0.7",
     "@proteinjs/util": "1.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
