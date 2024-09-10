@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/app-version-server",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "App version server components",
   "publishConfig": {
     "access": "public"
@@ -21,7 +21,7 @@
     "watch": "reflection-watch"
   },
   "dependencies": {
-    "@proteinjs/app-version-common": "^1.0.9",
+    "@proteinjs/app-version-common": "^1.0.10",
     "@proteinjs/reflection": "1.1.9",
     "semver": "7.6.0"
   },
