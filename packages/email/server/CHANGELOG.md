@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.2.5...@proteinjs/email-server@1.2.6) (2025-05-08)
+
+
+### Bug Fixes
+
+* `SignupConfirmationEmailConfig.getExistingUserEmailContent` is now optional. ([e528950](https://github.com/proteinjs/notifications/commit/e5289502ffbc44c44868c4d4e8274ede8cb748f8))
+
+
+
+
+
 ## [1.2.1](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.2.0...@proteinjs/email-server@1.2.1) (2024-08-16)
 
 
