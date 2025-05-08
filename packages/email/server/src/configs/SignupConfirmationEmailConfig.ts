@@ -59,11 +59,13 @@ export interface SignupConfirmationEmailConfig {
   /**
    * Generates the email content for an existing user if they attempt to sign up again.
    *
+   * If not provided, an email will not be sent in this scenario.
+   *
    * @returns An object containing the email content:
    * - text: The plain text version of the email (required)
    * - html: The HTML version of the email (optional, used for styling)
    */
-  getExistingUserEmailContent: () => {
+  getExistingUserEmailContent?: () => {
     text: string;
     html?: string;
   };
