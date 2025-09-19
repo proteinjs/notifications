@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/app-version-common",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "App version runtime-agnostic components",
   "publishConfig": {
     "access": "public"
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@proteinjs/reflection": "1.1.10",
-    "@proteinjs/service": "1.2.5"
+    "@proteinjs/service": "1.2.6"
   },
   "devDependencies": {
     "@proteinjs/reflection-build": "1.2.0",
