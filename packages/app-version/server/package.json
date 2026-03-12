@@ -22,11 +22,11 @@
   },
   "dependencies": {
     "@proteinjs/app-version-common": "^1.0.21",
-    "@proteinjs/reflection": "1.1.10",
+    "@proteinjs/reflection": "^1.1.10",
     "semver": "7.6.0"
   },
   "devDependencies": {
-    "@proteinjs/reflection-build": "1.4.2",
+    "@proteinjs/reflection-build": "^1.4.2",
     "@types/node": "20.8.2",
     "@types/semver": "7.5.8",
     "@typescript-eslint/eslint-plugin": "7.8.0",

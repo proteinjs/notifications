@@ -21,11 +21,11 @@
     "watch": "reflection-watch"
   },
   "dependencies": {
-    "@proteinjs/reflection": "1.1.10",
-    "@proteinjs/service": "1.2.10"
+    "@proteinjs/reflection": "^1.1.10",
+    "@proteinjs/service": "^1.2.10"
   },
   "devDependencies": {
-    "@proteinjs/reflection-build": "1.4.2",
+    "@proteinjs/reflection-build": "^1.4.2",
     "@types/jest": "29.5.5",
     "@types/node": "20.8.2",
     "@typescript-eslint/eslint-plugin": "7.8.0",

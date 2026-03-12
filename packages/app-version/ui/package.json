@@ -26,7 +26,7 @@
     "@mui/icons-material": "5.14.11",
     "@mui/material": "5.14.11",
     "@proteinjs/app-version-common": "^1.0.21",
-    "@proteinjs/util": "1.5.0",
+    "@proteinjs/util": "^1.5.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "socket.io-client": "4.7.5"
