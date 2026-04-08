@@ -15,8 +15,9 @@ export const getLatestVersionRequiringUpdate = () =>
  */
 export interface LatestVersionRequiringUpdate extends Loadable {
   /**
-   * If the user's bundle version is lower than this version, the `AppVersionUpdateBanner`
-   * will be displayed until they reload the page.
+   * If the user's bundle version is lower than this version, the user will be
+   * notified that an update is available (and auto-updated on next navigation
+   * or tab refocus).
    */
   version: string;
 }

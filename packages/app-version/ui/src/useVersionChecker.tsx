@@ -3,6 +3,8 @@ import { getVersionCheckerService } from '@proteinjs/app-version-common';
 import { Socket } from 'socket.io-client';
 import { Debouncer } from '@proteinjs/util';
 
+const VISIBILITY_CHANGE_THRESHOLD_MS = 30000;
+
 /**
  * A hook that exposes `needToUpdate`, which indicates whether or not the client's
  * bundle is stale and the new version has been marked as significant enough to
@@ -11,6 +13,10 @@ import { Debouncer } from '@proteinjs/util';
  *
  * This hook will check with the server if the client should update when the socket
  * receives a `connect` event.
+ *
+ * When `needToUpdate` is `true`, the hook will also automatically reload the page
+ * when the tab regains focus after being hidden for at least 30 seconds. This
+ * ensures background tabs pick up new versions without user interaction.
  *
  * Reason:
  *
@@ -26,6 +32,7 @@ export const useVersionChecker = (currentVersion: string, socket: Socket | null)
   const [needToUpdate, setNeedToUpdate] = useState(false);
   const debouncerRef = useRef<Debouncer>(new Debouncer(1000));
   const needToUpdateRef = useRef(needToUpdate); // having `needToUpdate` in the `checkVersion` dep array was causing double checks, despite debouncer
+  const hiddenAtRef = useRef<number | null>(null);
 
   useEffect(() => {
     needToUpdateRef.current = needToUpdate;
@@ -57,6 +64,32 @@ export const useVersionChecker = (currentVersion: string, socket: Socket | null)
       socket.off('connect', handleConnect);
     };
   }, [socket, checkVersion]);
+
+  // Auto-reload when the window regains focus after being blurred for 30s+.
+  // Uses window blur/focus rather than document visibilitychange so that
+  // switching to another desktop app (not just another browser tab) is detected.
+  useEffect(() => {
+    const handleBlur = () => {
+      hiddenAtRef.current = Date.now();
+    };
+
+    const handleFocus = () => {
+      if (
+        needToUpdateRef.current &&
+        hiddenAtRef.current &&
+        Date.now() - hiddenAtRef.current > VISIBILITY_CHANGE_THRESHOLD_MS
+      ) {
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
+    return () => {
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, []);
 
   return { needToUpdate };
 };
