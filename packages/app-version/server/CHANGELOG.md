@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.24](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-server@1.0.23...@proteinjs/app-version-server@1.0.24) (2026-04-08)
+
+**Note:** Version bump only for package @proteinjs/app-version-server
+
+
+
+
+
 ## [1.0.5](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-server@1.0.4...@proteinjs/app-version-server@1.0.5) (2024-08-16)
 
 
