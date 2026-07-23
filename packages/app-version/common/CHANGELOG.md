@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-common@1.1.5...@proteinjs/app-version-common@1.2.0) (2026-07-23)
+
+
+### Features
+
+* version checker never demands a version newer than the running server build ([a7c34a9](https://github.com/proteinjs/notifications/commit/a7c34a9dc5f168611ff84cce90cabbcb932332ec))
+
+
+
+
+
 # [1.1.0](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-common@1.0.22...@proteinjs/app-version-common@1.1.0) (2026-04-08)
 
 
