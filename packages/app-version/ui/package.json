@@ -26,6 +26,7 @@
     "@mui/icons-material": "5.14.11",
     "@mui/material": "5.14.11",
     "@proteinjs/app-version-common": "^1.2.3",
+    "@proteinjs/service": "^1.4.1",
     "@proteinjs/util": "^1.6.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
