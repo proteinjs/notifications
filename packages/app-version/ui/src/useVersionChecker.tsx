@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getVersionCheckerService } from '@proteinjs/app-version-common';
-import { ServiceClient } from '@proteinjs/service';
 import { Socket } from 'socket.io-client';
 import { Debouncer } from '@proteinjs/util';
 
@@ -41,12 +40,7 @@ export const useVersionChecker = (currentVersion: string, socket: Socket | null)
 
   const checkVersion = useCallback(async () => {
     try {
-      // markBackground: the check is machine-initiated (fires on socket reconnect, not on a
-      // person doing something), so its request carries the background marker — dev tooling
-      // (the serve-package request-activity hold) must not count it as real activity.
-      const newNeedToUpdate = await ServiceClient.markBackground(() =>
-        getVersionCheckerService().needToUpdate(currentVersion)
-      );
+      const newNeedToUpdate = await getVersionCheckerService().needToUpdate(currentVersion);
       if (needToUpdateRef.current !== newNeedToUpdate) {
         setNeedToUpdate(newNeedToUpdate);
       }
