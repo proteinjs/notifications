@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-ui@1.2.1...@proteinjs/app-version-ui@1.2.2) (2026-08-13)
+
+**Note:** Version bump only for package @proteinjs/app-version-ui
+
+
+
+
+
 ## [1.1.6](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-ui@1.1.5...@proteinjs/app-version-ui@1.1.6) (2026-07-23)
 
 **Note:** Version bump only for package @proteinjs/app-version-ui

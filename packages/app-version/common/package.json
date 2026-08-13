@@ -1,6 +1,6 @@
 {
   "name": "@proteinjs/app-version-common",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "App version runtime-agnostic components",
   "publishConfig": {
     "access": "public"
