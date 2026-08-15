@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-ui@1.2.2...@proteinjs/app-version-ui@1.3.0) (2026-08-15)
+
+
+### Features
+
+* **app-version-ui:** reload-biased level-triggered updates, refocus-race fix, mount-anywhere provider ([b8c9246](https://github.com/proteinjs/notifications/commit/b8c9246568f354930479944eb8310b8c59dd4c5b))
+
+
+
+
+
 ## [1.2.2](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-ui@1.2.1...@proteinjs/app-version-ui@1.2.2) (2026-08-13)
 
 **Note:** Version bump only for package @proteinjs/app-version-ui
