@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.3.1...@proteinjs/email-server@1.3.2) (2026-08-19)
+
+
+### Bug Fixes
+
+* the transport config owns the wire from-address — per-message options can never fork the sender ([e15adfd](https://github.com/proteinjs/notifications/commit/e15adfd710c6ab59c3dba206c88e145e8b6507cc))
+
+
+
+
+
 ## [1.3.1](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.3.0...@proteinjs/email-server@1.3.1) (2026-08-13)
 
 **Note:** Version bump only for package @proteinjs/email-server
