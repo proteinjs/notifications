@@ -58,9 +58,15 @@ export class EmailSender {
   }
 
   async sendEmail(mailOptions: Mail.Options): Promise<void> {
+    // The sender identity has ONE owner: the transport config's `from` (founder ruling
+    // 2026-08-19, round-2 smoke — the deletion email must never fork from the app's public
+    // sender). Per-message options can carry content (subject/text/html/to), but a stray
+    // `options.from` spread through a call site must not silently override the identity —
+    // that seam is how a sender fork would recur. A caller that genuinely needs a different
+    // identity constructs its own EmailSender via `createEmailSender(config)`.
     const finalMailOptions = {
-      from: this.fromAddress,
       ...mailOptions,
+      from: this.fromAddress,
     };
 
     try {
