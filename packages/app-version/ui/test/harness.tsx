@@ -10,6 +10,7 @@ import React from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { Socket } from 'socket.io-client';
+import { UserAuth, guestUser } from '@proteinjs/user-auth';
 
 declare global {
   // eslint-disable-next-line no-var
@@ -123,6 +124,26 @@ export const flush = async () => {
   await act(async () => {
     await Promise.resolve();
   });
+};
+
+/**
+ * The session seam: the check is a signed-in read (`UserAuth.isLoggedIn()`, the primitive the
+ * service gate reads too), set through a typed cast on UserAuth's private static — a bare jest
+ * process has no reflection graph to serve the real AuthenticatedUserRepo. `signedOut` mirrors
+ * what the server seeds for an anonymous request: the guest user.
+ */
+type UserAuthInternals = { userRepo?: { getUser: () => { email: string; roles: string[] } } };
+
+export const setSession = (email: string) => {
+  (UserAuth as unknown as UserAuthInternals).userRepo = { getUser: () => ({ email, roles: [] }) };
+};
+
+export const signedIn = () => setSession('user@test.local');
+
+export const signedOut = () => setSession(guestUser.email);
+
+export const clearSession = () => {
+  (UserAuth as unknown as UserAuthInternals).userRepo = undefined;
 };
 
 export const blurWindow = () =>

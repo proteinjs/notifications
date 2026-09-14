@@ -17,7 +17,8 @@ const VersionCheckerContext = createContext<VersionCheckerContextValue | null>(n
 /**
  * Headless owner of the version-check machinery (`useVersionChecker`). Mount once at the app
  * root — anywhere below your socket provider, independent of any toolbar/chrome — so version
- * checking and auto-reload run for every page state. Views that surface the update affordance
+ * checking and auto-reload run for every page state (the check itself runs only while a session
+ * exists; see `useVersionChecker`). Views that surface the update affordance
  * (e.g. a toolbar update button) consume `useVersionCheckerContext`; they are only views, and
  * whether they are mounted has no effect on the mechanism. Surfaces holding unsaved user
  * state register reload guards through the same context.

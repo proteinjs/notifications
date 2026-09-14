@@ -20,7 +20,11 @@ import {
   advance,
   flush,
   blurWindow,
+  signedIn,
 } from './harness';
+
+// The check is a signed-in read (sessionGate.test.tsx owns that contract).
+beforeAll(() => signedIn());
 import { act } from 'react-dom/test-utils';
 
 const mockNeedToUpdateService = jest.fn<Promise<boolean>, [string]>();

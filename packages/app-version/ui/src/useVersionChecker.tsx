@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getVersionCheckerService } from '@proteinjs/app-version-common';
+import { UserAuth } from '@proteinjs/user-auth';
 import { Socket } from 'socket.io-client';
 import { Debouncer } from '@proteinjs/util';
 
@@ -59,6 +60,14 @@ const hasFocusedEditable = () => {
  * The check runs when the socket receives a `connect` event and when the tab returns to
  * visibility (the reconnect covers a returning tab only incidentally — a socket that
  * survived the absence never reconnects).
+ *
+ * The check is a SIGNED-IN read. Its server half (`VersionChecker`, `allUsers`) refuses a call
+ * without a session, and a page without one has nothing to converge: signing in is a full page
+ * load, which fetches the served bundle and connects the socket, so the first signed-in check
+ * runs then. A trigger with no session is skipped, not queued — the next trigger with a session
+ * (a reconnect, a return to visibility) checks. Both halves read the same primitive,
+ * `UserAuth.isLoggedIn()`, so they cannot disagree; a consumer with no authenticated-user repo
+ * registered never checks — the same consumer the service would refuse.
  *
  * The response to a stale result is level-triggered and biased toward actually reloading —
  * the update affordance is the fallback, not the default:
@@ -150,9 +159,16 @@ export const useVersionChecker = (currentVersion: string, socket: Socket | null)
     // transition (hide/blur, or the idle window opening).
   }, []);
 
-  /** Check with the server, then act on the result per the level-triggered rules above. */
+  /**
+   * Check with the server, then act on the result per the level-triggered rules above — only
+   * while a session exists (see the hook doc); without one there is no call and no error line.
+   */
   const checkVersion = useCallback(async () => {
     try {
+      if (!UserAuth.isLoggedIn()) {
+        return;
+      }
+
       const newNeedToUpdate = await getVersionCheckerService().needToUpdate(currentVersion);
       staleRef.current = newNeedToUpdate;
       if (!newNeedToUpdate) {

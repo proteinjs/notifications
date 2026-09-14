@@ -10,7 +10,19 @@
 import React, { useEffect } from 'react';
 import { Socket } from 'socket.io-client';
 import { useVersionChecker } from '../src/useVersionChecker';
-import { FakeSocket, VisibilityController, Deferred, mount, installReloadSpy, advance, flush } from './harness';
+import {
+  FakeSocket,
+  VisibilityController,
+  Deferred,
+  mount,
+  installReloadSpy,
+  advance,
+  flush,
+  signedIn,
+} from './harness';
+
+// The check is a signed-in read (sessionGate.test.tsx owns that contract).
+beforeAll(() => signedIn());
 import { act } from 'react-dom/test-utils';
 
 const mockNeedToUpdateService = jest.fn<Promise<boolean>, [string]>();

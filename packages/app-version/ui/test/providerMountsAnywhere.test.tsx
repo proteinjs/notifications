@@ -9,7 +9,19 @@
  */
 import React from 'react';
 import { VersionCheckerProvider, useVersionCheckerContext } from '../src/VersionCheckerProvider';
-import { FakeSocket, VisibilityController, Deferred, mount, installReloadSpy, advance, flush } from './harness';
+import {
+  FakeSocket,
+  VisibilityController,
+  Deferred,
+  mount,
+  installReloadSpy,
+  advance,
+  flush,
+  signedIn,
+} from './harness';
+
+// The check is a signed-in read (sessionGate.test.tsx owns that contract).
+beforeAll(() => signedIn());
 import { act } from 'react-dom/test-utils';
 
 const mockNeedToUpdateService = jest.fn<Promise<boolean>, [string]>();

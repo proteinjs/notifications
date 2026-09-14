@@ -17,9 +17,9 @@ depended on by your server package
 3. Mount `VersionCheckerProvider` once at your app root (anywhere below your socket provider)
     - Add a dependency on `@proteinjs/app-version-ui`
     - The provider is headless and owns the whole mechanism: version checks (on socket
-    `connect` and on the tab returning to visibility) and auto-reload. Do not mount it inside
-    conditional chrome (ie. a collapsible toolbar) — chrome that unmounts takes the mechanism
-    down with it.
+    `connect` and on the tab returning to visibility, while a session exists) and auto-reload.
+    Do not mount it inside conditional chrome (ie. a collapsible toolbar) — chrome that
+    unmounts takes the mechanism down with it.
     - The response to a stale client is biased toward actually reloading: a hidden or blurred
     tab reloads immediately, a visible tab reloads once its user has been idle for ~45s, and a
     tab returning from a 30s+ absence reloads on arrival. Only a tab in active use defers —
