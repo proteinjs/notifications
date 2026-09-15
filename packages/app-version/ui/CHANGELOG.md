@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-ui@1.3.1...@proteinjs/app-version-ui@1.3.2) (2026-09-15)
+
+
+### Bug Fixes
+
+* **app-version-ui:** the version check is a signed-in read — no call and no error line without a session ([c66f3ca](https://github.com/proteinjs/notifications/commit/c66f3ca12e59f9e4840dc96d4c87e068deaebabd))
+
+
+
+
+
 ## [1.3.1](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-ui@1.3.0...@proteinjs/app-version-ui@1.3.1) (2026-09-13)
 
 **Note:** Version bump only for package @proteinjs/app-version-ui
