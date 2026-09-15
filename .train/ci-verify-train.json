@@ -1,9 +1,0 @@
-{
-  "branch": "ci/verify-train",
-  "packages": [
-    "app-version/ui",
-    "email/server"
-  ],
-  "suites": [],
-  "removes": []
-}
