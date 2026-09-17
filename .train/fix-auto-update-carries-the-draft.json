@@ -1,0 +1,3 @@
+{ "branch": "fix/auto-update-carries-the-draft", "packages": ["app-version/ui"],
+  "suites": ["packages/app-version/ui/test/staleReloadsNow.test.tsx", "packages/app-version/ui/test/reloadGuards.test.tsx",
+             "packages/app-version/ui/test/sessionGate.test.tsx", "packages/app-version/ui/test/providerMountsAnywhere.test.tsx"], "removes": [] }
