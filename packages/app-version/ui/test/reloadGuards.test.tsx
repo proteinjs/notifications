@@ -1,15 +1,17 @@
 /**
  * @jest-environment jsdom
  *
- * Hard reload guards (design ruling 2026-08-14): app-registered guards (an unsent composer
- * draft, a streaming/in-flight turn, a thought editor's debounced-save window) veto an
- * auto-reload in EVERY state — even a hidden tab must not reload over unsaved input. Guards
- * defer, never cancel: while vetoed the mechanism stays armed and retries, and the reload
- * fires at the first safe moment after the guard releases.
+ * Reload guards DEFER, bounded — never veto. A consumer registers a guard for a moment the page
+ * must not be torn down in (a request in flight whose loss it could not recover from); while the
+ * guard holds, the reload waits and re-asks on a short cadence, and it fires at the first release.
+ * A guard cannot hold forever: `RELOAD_DEFER_MAX_MS` after staleness was detected the reload fires
+ * whatever the guards say. State the page can restore by itself after a reload (an unsent draft its
+ * editor persists) is not a reason to guard, and a guard that reads such state indefinitely was the
+ * failure mode this bound exists for.
  */
 import React, { useEffect } from 'react';
 import { Socket } from 'socket.io-client';
-import { useVersionChecker } from '../src/useVersionChecker';
+import { useVersionChecker, RELOAD_DEFER_MAX_MS, RELOAD_RETRY_INTERVAL_MS } from '../src/useVersionChecker';
 import {
   FakeSocket,
   VisibilityController,
@@ -53,7 +55,7 @@ const ApiProbe = ({
 const reloadSpy = installReloadSpy();
 const visibility = new VisibilityController();
 
-describe('reload guards veto in every state and defer, never cancel', () => {
+describe('reload guards defer for a bounded time, never veto', () => {
   let socket: FakeSocket;
   let mounted: ReturnType<typeof mount> | undefined;
   let api!: CheckerApi;
@@ -90,37 +92,47 @@ describe('reload guards veto in every state and defer, never cancel', () => {
     jest.useRealTimers();
   });
 
-  it('vetoes even the hidden reload, then reloads once the guard releases', async () => {
-    let draftExists = true; // e.g. an unsent composer draft
+  it('a holding guard defers the reload; the reload fires at the first release', async () => {
+    let requestInFlight = true;
     mountProbe();
-    act(() => void api.registerReloadGuard(() => draftExists));
-
-    visibility.set('hidden');
-    await detectStale();
-    expect(reloadSpy).not.toHaveBeenCalled(); // hidden would be a free reload, but the draft vetoes
-    expect(flag()).toBe('true'); // deferred, not cancelled — still armed
-
-    draftExists = false;
-    await advance(6_000); // next retry sees the guard released and the tab still hidden
-    expect(reloadSpy).toHaveBeenCalledTimes(1);
-  });
-
-  it('vetoes the idle reload until the guard releases', async () => {
-    let streaming = true; // e.g. an in-flight streaming turn
-    mountProbe();
-    act(() => void api.registerReloadGuard(() => streaming));
+    act(() => void api.registerReloadGuard(() => requestInFlight));
 
     await detectStale();
-    await advance(60_000); // idle window long open, but the turn is still streaming
     expect(reloadSpy).not.toHaveBeenCalled();
-    expect(flag()).toBe('true');
+    expect(flag()).toBe('true'); // stale is known — deferred, not cancelled
 
-    streaming = false;
-    await advance(10_000);
+    requestInFlight = false;
+    await advance(RELOAD_RETRY_INTERVAL_MS);
     expect(reloadSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('unregistering a guard removes its veto', async () => {
+  it('a guard that never releases is overridden at the bound', async () => {
+    mountProbe();
+    act(() => void api.registerReloadGuard(() => true));
+
+    await detectStale();
+    await advance(RELOAD_DEFER_MAX_MS - RELOAD_RETRY_INTERVAL_MS - 1);
+    expect(reloadSpy).not.toHaveBeenCalled(); // inside the bound the guard still holds
+
+    await advance(RELOAD_RETRY_INTERVAL_MS + 1);
+    expect(reloadSpy).toHaveBeenCalledTimes(1); // the bound passed: the guard no longer counts
+  });
+
+  it('a guard defers a hidden page exactly the same way', async () => {
+    let requestInFlight = true;
+    visibility.set('hidden');
+    mountProbe();
+    act(() => void api.registerReloadGuard(() => requestInFlight));
+
+    await detectStale();
+    expect(reloadSpy).not.toHaveBeenCalled();
+
+    requestInFlight = false;
+    await advance(RELOAD_RETRY_INTERVAL_MS);
+    expect(reloadSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('unregistering a guard removes its deferral', async () => {
     mountProbe();
     let unregister!: () => void;
     act(() => {
@@ -128,11 +140,31 @@ describe('reload guards veto in every state and defer, never cancel', () => {
     });
 
     await detectStale();
-    await act(async () => visibility.change('hidden'));
     expect(reloadSpy).not.toHaveBeenCalled();
 
     act(() => unregister());
-    await advance(6_000);
+    await advance(RELOAD_RETRY_INTERVAL_MS);
+    expect(reloadSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('a second stale answer while deferred neither restarts the bound nor doubles the reload', async () => {
+    mountProbe();
+    act(() => void api.registerReloadGuard(() => true));
+
+    await detectStale();
+    await advance(RELOAD_DEFER_MAX_MS / 2);
+    // The page comes back to visibility mid-deferral: another check, another stale answer.
+    mockNeedToUpdateService.mockResolvedValue(true);
+    await act(async () => visibility.change('hidden'));
+    await act(async () => visibility.change('visible'));
+    await advance(1000);
+    await flush();
+    expect(reloadSpy).not.toHaveBeenCalled();
+
+    // The bound counts from the FIRST detection.
+    await advance(RELOAD_DEFER_MAX_MS / 2 + RELOAD_RETRY_INTERVAL_MS);
+    expect(reloadSpy).toHaveBeenCalledTimes(1);
+    await advance(RELOAD_DEFER_MAX_MS);
     expect(reloadSpy).toHaveBeenCalledTimes(1);
   });
 });

@@ -17,17 +17,18 @@ depended on by your server package
 3. Mount `VersionCheckerProvider` once at your app root (anywhere below your socket provider)
     - Add a dependency on `@proteinjs/app-version-ui`
     - The provider is headless and owns the whole mechanism: version checks (on socket
-    `connect` and on the tab returning to visibility, while a session exists) and auto-reload.
+    `connect` and on the tab returning to visibility, while a session exists) and the reload.
     Do not mount it inside conditional chrome (ie. a collapsible toolbar) — chrome that
     unmounts takes the mechanism down with it.
-    - The response to a stale client is biased toward actually reloading: a hidden or blurred
-    tab reloads immediately, a visible tab reloads once its user has been idle for ~45s, and a
-    tab returning from a 30s+ absence reloads on arrival. Only a tab in active use defers —
-    there, render your update affordance (ie. a banner or toolbar button) from
-    `useVersionCheckerContext().needToUpdate`, and the reload still fires at the next safe
-    transition (hide/blur or the idle window opening).
-    - Surfaces holding unsaved user state (an unsent composer draft, a streaming turn, an
-    editor with a pending debounced save) register vetoes via
-    `useVersionCheckerContext().registerReloadGuard(guard)`. A guard returning `true` blocks
-    auto-reload in every state — even hidden — and defers it (the reload fires once the guard
-    releases); it never cancels it.
+    - A stale client RELOADS as soon as staleness is known, in every page state — there is no
+    update affordance for the user to act on and no safe-moment heuristic (hidden, blurred,
+    idle) to wait for. An app that wants to say something before the page goes may render a
+    transient notice from `useVersionCheckerContext().needToUpdate`; nothing it renders is
+    required for the reload to happen.
+    - Surfaces with a request in flight the page could not recover from losing (a message sent
+    and not yet acknowledged, an upload still landing, a live audio capture) register a guard via
+    `useVersionCheckerContext().registerReloadGuard(guard)`. A guard returning `true` DEFERS the
+    reload: it is re-asked every `RELOAD_RETRY_INTERVAL_MS` and the reload fires at the first
+    release — and in any case `RELOAD_DEFER_MAX_MS` after staleness was detected. A guard never
+    cancels a reload and never holds one indefinitely. State the page restores by itself after a
+    reload (an unsent draft its editor persists) is not a reason to guard.
