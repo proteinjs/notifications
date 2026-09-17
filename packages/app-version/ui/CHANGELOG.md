@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.3](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-ui@1.3.2...@proteinjs/app-version-ui@1.3.3) (2026-09-17)
+
+
+### Bug Fixes
+
+* **app-version-ui:** a stale bundle reloads the moment staleness is known; guards defer, bounded, never veto ([cc65749](https://github.com/proteinjs/notifications/commit/cc65749f680d77352b67520a72c885e6044ca976))
+
+
+
+
+
 ## [1.3.2](https://github.com/proteinjs/notifications/compare/@proteinjs/app-version-ui@1.3.1...@proteinjs/app-version-ui@1.3.2) (2026-09-15)
 
 
