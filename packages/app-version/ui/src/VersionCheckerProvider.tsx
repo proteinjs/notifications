@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useMemo, ReactNode } from 'react';
 import { Socket } from 'socket.io-client';
+import { ClientBuildVersion } from '@proteinjs/service';
 import { useVersionChecker, ReloadGuard } from './useVersionChecker';
 
 export type VersionCheckerContextValue = {
@@ -23,6 +24,11 @@ const VersionCheckerContext = createContext<VersionCheckerContextValue | null>(n
  * happen; a view may consume `useVersionCheckerContext` for a transient notice, and whether it is
  * mounted has no effect on the mechanism. Surfaces with a request in flight register reload
  * guards through the same context (bounded deferral, never a veto).
+ *
+ * `currentVersion` is also the client's build version for the service layer: mounting the
+ * provider installs it as @proteinjs/service's ClientBuildVersion, so every service request the
+ * client sends declares its build (`x-client-version`) — the fact ServiceRouter compares with the
+ * server's build when a request names a service path the server does not register.
  */
 export const VersionCheckerProvider = ({
   currentVersion,
@@ -35,6 +41,12 @@ export const VersionCheckerProvider = ({
   socket: Socket | null;
   children: ReactNode;
 }) => {
+  // Installed during render, not in an effect: effects run children-first and after the paint,
+  // and a child's first service call is issued from its own mount — it must already carry the
+  // header. A module-level fact keyed on the prop; idempotent under re-renders.
+  if (ClientBuildVersion.get() !== currentVersion) {
+    ClientBuildVersion.set(currentVersion);
+  }
   const { needToUpdate, registerReloadGuard } = useVersionChecker(currentVersion, socket);
   const value = useMemo(() => ({ needToUpdate, registerReloadGuard }), [needToUpdate, registerReloadGuard]);
   return <VersionCheckerContext.Provider value={value}>{children}</VersionCheckerContext.Provider>;
