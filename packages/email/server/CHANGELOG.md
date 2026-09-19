@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.3.3...@proteinjs/email-server@1.4.0) (2026-09-19)
+
+
+### Features
+
+* **email-server:** the mail sink — a development process never sends real email by accident ([24f79df](https://github.com/proteinjs/notifications/commit/24f79df4b4875e5406485e26cb104ae48c8889bb))
+
+
+
+
+
 ## [1.3.3](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.3.2...@proteinjs/email-server@1.3.3) (2026-09-13)
 
 **Note:** Version bump only for package @proteinjs/email-server
