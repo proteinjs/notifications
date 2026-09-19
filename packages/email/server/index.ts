@@ -3,3 +3,4 @@ export * from './src/configs/PasswordResetEmailConfig';
 export * from './src/configs/PasswordUpdatedEmailConfig';
 export * from './src/configs/SignupConfirmationEmailConfig';
 export * from './src/EmailSender';
+export * from './src/MailSink';
