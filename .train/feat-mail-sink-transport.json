@@ -1,0 +1,2 @@
+{ "branch": "feat/mail-sink-transport", "packages": ["email/server"],
+  "suites": ["packages/email/server/test/EmailSenderTransport.test.ts", "packages/email/server/test/EmailSenderFrom.test.ts"], "removes": [] }
