@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import { Logger } from '@proteinjs/logger';
 import { Loadable, SourceRepository } from '@proteinjs/reflection';
+import { RequestDigests } from '@proteinjs/util-node';
 import Mail from 'nodemailer/lib/mailer';
 import { MailSink } from './MailSink';
 
@@ -41,6 +42,8 @@ export type EmailTransport =
 
 export class EmailSender {
   private static defaultEmailConfig: EmailConfig;
+  /** How deep a failed send's error is copied for the log (nodemailer nests one level: `rejectedErrors`). */
+  private static readonly ERROR_DEPTH = 4;
   private config: EmailConfig;
   private transport: EmailTransport;
   /** The real transporter — present only on the smtp transport; the sink records without one. */
@@ -75,11 +78,25 @@ export class EmailSender {
       return;
     }
 
+    // No address reaches the log: the lines name the recipients by their address digests and
+    // their domains. Digested BEFORE the send, so a process that cannot digest (no key) fails
+    // before anything leaves rather than after.
+    const recipients = [
+      ...MailSink.addresses(finalMailOptions.to),
+      ...MailSink.addresses(finalMailOptions.cc),
+      ...MailSink.addresses(finalMailOptions.bcc),
+    ];
+    const digests = new RequestDigests();
+    const named = { recipients: recipients.map((address) => digests.address(address)) };
     try {
       await this.transporter!.sendMail(finalMailOptions);
-      this.logger.info({ message: `Email sent successfully to ${mailOptions.to}` });
+      this.logger.info({ message: `Email sent — ${this.recipientSummary(recipients)}`, obj: named });
     } catch (error: any) {
-      this.logger.error({ message: 'Error sending email', error });
+      this.logger.error({
+        message: `Error sending email — ${this.recipientSummary(recipients)}`,
+        obj: named,
+        error: this.withDigests(error, recipients, digests),
+      });
       throw new Error('Failed to send email');
     }
   }
@@ -134,7 +151,7 @@ export class EmailSender {
   /** The sink path: the message is recorded, never transported; ONE line says so — recipient count and domains, never local parts. */
   private record(message: Mail.Options, transport: Extract<EmailTransport, { kind: 'sink' }>): void {
     const record = MailSink.get().record(message, transport.refused);
-    const recipients = `${record.to.length} recipient${record.to.length === 1 ? '' : 's'} (${MailSink.domains(record.to).join(', ') || 'no domain'})`;
+    const recipients = this.recipientSummary(record.to);
     if (transport.refused) {
       this.logger.warn({
         message: `Refusing the real SMTP transport: ${transport.why} — ${recipients} recorded in the mail sink instead as ${record.id}`,
@@ -144,6 +161,47 @@ export class EmailSender {
     this.logger.info({
       message: `Mail sink: recorded ${record.id} (not sent) — ${recipients}, subject "${record.subject}"`,
     });
+  }
+
+  /** What a log line may say about a recipient list: the count and the domains, never a local part. */
+  private recipientSummary(addresses: string[]): string {
+    return `${addresses.length} recipient${addresses.length === 1 ? '' : 's'} (${MailSink.domains(addresses).join(', ') || 'no domain'})`;
+  }
+
+  /**
+   * A failed send's error as the log may carry it: the transport's own words (an SMTP server's
+   * reply repeats the address it refused) with each of this send's recipient addresses replaced
+   * by its address digest, in every text the error holds — message, stack, reply, rejected list.
+   */
+  private withDigests(value: unknown, addresses: string[], digests: RequestDigests, depth = 0): unknown {
+    if (typeof value === 'string') {
+      return addresses.reduce(
+        (text, address) => text.replace(EmailSender.occurrences(address), digests.address(address)),
+        value
+      );
+    }
+    if (value === null || typeof value !== 'object' || depth >= EmailSender.ERROR_DEPTH) {
+      return value;
+    }
+    if (Array.isArray(value)) {
+      return value.map((entry) => this.withDigests(entry, addresses, digests, depth + 1));
+    }
+    const fields: Record<string, unknown> = {};
+    for (const [key, field] of Object.entries(value)) {
+      fields[key] = this.withDigests(field, addresses, digests, depth + 1);
+    }
+    if (!(value instanceof Error)) {
+      return fields;
+    }
+    const error = new Error(this.withDigests(value.message, addresses, digests) as string);
+    error.name = value.name;
+    error.stack = this.withDigests(value.stack, addresses, digests) as string | undefined;
+    return Object.assign(error, fields);
+  }
+
+  /** Every occurrence of an address in a text, whatever its case. */
+  private static occurrences(address: string): RegExp {
+    return new RegExp(address.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
   }
 }
 
