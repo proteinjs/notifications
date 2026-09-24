@@ -1,0 +1,3 @@
+{ "branch": "chore/floors-r10p2-fold1-util-node", "packages": ["email/server"],
+  "suites": ["packages/email/server/test/EmailSenderFrom.test.ts", "packages/email/server/test/EmailSenderTransport.test.ts"],
+  "removes": [] }
