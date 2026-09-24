@@ -19,8 +19,8 @@ jest.mock('nodemailer', () => ({
   createTransport: () => ({ sendMail: (message: Record<string, unknown>) => sendMailMock(message) }),
 }));
 
-/** An e-mail address, as the house's log check reads one. */
-const ADDRESS_SHAPE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
+/** An e-mail address, as the house's log check reads one: bare, or URL-encoded (`%40` for the `@`). */
+const ADDRESS_SHAPE = /[A-Za-z0-9._%+-]+(?:@|%40)[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
 const realConfig: EmailConfig = {
   host: 'smtp.test.local',
@@ -117,6 +117,35 @@ describe('EmailSender — no address reaches the log', () => {
     expect(log).toContain('1 recipient (example.com)');
     expect(log).toContain(`550 5.1.1 <${digests.address('bounced@example.com')}>: User unknown`);
     expect(log).toContain('EENVELOPE');
+  });
+
+  test("a send the server refuses for its SENDER: the reply names the sender's own address — its digest in the log, with the cause the transport chained", async () => {
+    // A sender-address refusal: the reply repeats the configured From address, not a recipient's,
+    // and the transport chains the underlying socket error as a non-enumerable cause.
+    const refusal = Object.assign(
+      new Error('Mail command failed: 553 5.7.1 <hi@example.com>: Sender address rejected'),
+      {
+        code: 'EENVELOPE',
+        response: '553 5.7.1 <hi@example.com>: Sender address rejected',
+        responseCode: 553,
+        command: 'MAIL FROM',
+      }
+    );
+    Object.defineProperty(refusal, 'cause', {
+      value: new Error('553 reply to MAIL FROM:<hi@example.com>'),
+      enumerable: false,
+    });
+    sendMailMock.mockRejectedValue(refusal);
+
+    const log = await captureLog(async () => {
+      await expect(
+        new EmailSender(realConfig).sendEmail({ to: 'someone@example.org', subject: 'Welcome', text: 'hi' })
+      ).rejects.toThrow('Failed to send email');
+    });
+
+    expect(log.match(ADDRESS_SHAPE)).toBeNull();
+    expect(log).toContain(`553 5.7.1 <${digests.address('hi@example.com')}>: Sender address rejected`);
+    expect(log).toContain(`553 reply to MAIL FROM:<${digests.address('hi@example.com')}>`);
   });
 
   test('a send recorded in the declared sink, and one refused into it: domain only', async () => {
