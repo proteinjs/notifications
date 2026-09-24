@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.4.0...@proteinjs/email-server@1.4.1) (2026-09-24)
+
+
+### Bug Fixes
+
+* **email-server:** a failed send's error reaches the log through RequestDigests.redactError ([5d520be](https://github.com/proteinjs/notifications/commit/5d520be0efa8578479f87614ea84a9b56177b52b))
+* **email-server:** no address in a send's log lines — recipients by address digest and domain ([fe37478](https://github.com/proteinjs/notifications/commit/fe3747845c17106048106177002a3f2e4131ddfd))
+
+
+
+
+
 # [1.4.0](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.3.3...@proteinjs/email-server@1.4.0) (2026-09-19)
 
 
