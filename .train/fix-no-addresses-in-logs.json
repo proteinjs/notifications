@@ -1,2 +1,0 @@
-{ "branch": "fix/no-addresses-in-logs", "packages": ["email/server"],
-  "suites": ["packages/email/server/test/EmailSenderLogs.test.ts", "packages/email/server/test/EmailSenderTransport.test.ts", "packages/email/server/test/EmailSenderFrom.test.ts"], "removes": [] }
