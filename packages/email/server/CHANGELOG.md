@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.2](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.4.1...@proteinjs/email-server@1.4.2) (2026-10-03)
+
+
+### Bug Fixes
+
+* **email-server:** the public declarations resolve their types from the declared dependencies ([6557b78](https://github.com/proteinjs/notifications/commit/6557b786c3335c8544cd4862c389763edf13397b))
+
+
+
+
+
 ## [1.4.1](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.4.0...@proteinjs/email-server@1.4.1) (2026-09-24)
 
 
