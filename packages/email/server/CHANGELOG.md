@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.4.2...@proteinjs/email-server@1.5.0) (2026-10-28)
+
+
+### Features
+
+* **email-server:** the new-user signup mail may carry a verify-email link — SignupConfirmationEmailConfig.getNewUserEmailContent takes an optional SignupConfirmationEmailContext ({ verifyEmailLink }: the partial path that confirms the address, absent for an account created from an invite); the default content ignores it; a config written without the argument stays a SignupConfirmationEmailConfig (the compatibility clause, pinned); the context type on the package index; the branch manifest ([533c790](https://github.com/proteinjs/notifications/commit/533c790c07171376065c2a9e5edc9d0728fae303))
+
+
+
+
+
 ## [1.4.2](https://github.com/proteinjs/notifications/compare/@proteinjs/email-server@1.4.1...@proteinjs/email-server@1.4.2) (2026-10-03)
 
 
