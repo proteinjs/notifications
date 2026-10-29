@@ -18,15 +18,18 @@
   "scripts": {
     "clean": "rm -rf dist/ generated/ node_modules/",
     "build": "reflection-build && tsc",
-    "watch": "reflection-watch"
+    "watch": "reflection-watch",
+    "test": "jest --passWithNoTests"
   },
   "dependencies": {
     "@proteinjs/app-version-common": "^1.3.3",
+    "@proteinjs/logger": "^1.1.0",
     "@proteinjs/reflection": "^1.2.1",
     "semver": "7.6.0"
   },
   "devDependencies": {
     "@proteinjs/reflection-build": "^1.4.10",
+    "@types/jest": "29.5.5",
     "@types/node": "20.8.2",
     "@types/semver": "7.5.8",
     "@typescript-eslint/eslint-plugin": "7.8.0",
@@ -34,6 +37,8 @@
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.1.3",
+    "jest": "29.7.0",
+    "ts-jest": "29.1.1",
     "typescript": "5.2.2"
   },
   "main": "./dist/generated/index.js",
