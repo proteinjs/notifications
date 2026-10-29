@@ -1,6 +1,6 @@
 {
   "branch": "fix/stale-clients-reload",
-  "packages": ["app-version-server"],
+  "packages": ["app-version/server"],
   "suites": ["packages/app-version/server/test/VersionCheckerVerdictLog.test.ts"],
   "removes": []
 }
